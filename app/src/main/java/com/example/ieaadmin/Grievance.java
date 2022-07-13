@@ -68,9 +68,4 @@ public class Grievance extends AppCompatActivity {
         grievanceAdapter.startListening();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        grievanceAdapter.stopListening();
-    }
 }

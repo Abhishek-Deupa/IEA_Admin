@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,16 +28,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
+
 public class GrievanceDetail extends AppCompatActivity {
 
-    TextView grievanceEmailTv, grievanceDepartmentTv, grievanceStatusTv, grievanceDescriptionTv, grievanceSubjectTv;
-    AppCompatButton grievanceSetStatusBtn;
+    TextView grievanceEmailTv, grievanceDepartmentTv, grievanceStatusTv, grievanceSubjectTv;
+    AppCompatButton grievanceSetStatusBtn, grievanceUpdateBtn;
     FirebaseDatabase solvedGrievanceRoot;
     DatabaseReference solvedGrievanceRef, rejectedGrievanceRef, ref2;
-    String grievanceEmailStr, grievanceDepartmentStr, grievanceDescriptionStr, grievanceStatusStr, grievanceSubjectStr;
+    String grievanceEmailStr, grievanceDepartmentStr, grievanceDescriptionStr, grievanceStatusStr, grievanceSubjectStr, grievanceItemKey;
     AutoCompleteTextView grievanceStatusField;
-    String grievanceItemKey;
     CardView grievanceShareEmailCv, grievanceShareTwitterCv, grievanceShareFbCv, grievanceShareInstagramCv;
+    EditText grievanceDescriptionEdtTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class GrievanceDetail extends AppCompatActivity {
         grievanceEmailTv = findViewById(R.id.grievance_email_detail_tv);
         grievanceDepartmentTv = findViewById(R.id.grievance_department_detail_tv);
         grievanceStatusTv = findViewById(R.id.grievance_status_detail_tv);
-        grievanceDescriptionTv = findViewById(R.id.grievance_description_detail_tv);
+        grievanceDescriptionEdtTxt = findViewById(R.id.grievance_description_detail_edtTxt);
         grievanceSubjectTv = findViewById(R.id.grievance_subject_detail_tv);
         grievanceStatusField = findViewById(R.id.grievance_status_field);
         grievanceSetStatusBtn = findViewById(R.id.grievance_set_status_btn);
@@ -56,6 +59,7 @@ public class GrievanceDetail extends AppCompatActivity {
         grievanceShareTwitterCv = findViewById(R.id.grievance_share_twitter_cv);
         grievanceShareFbCv = findViewById(R.id.grievance_share_fb_cv);
         grievanceShareInstagramCv = findViewById(R.id.grievance_share_instagram_cv);
+        grievanceUpdateBtn = findViewById(R.id.grievance_update_btn);
 
         dropdownInit();
 
@@ -77,7 +81,7 @@ public class GrievanceDetail extends AppCompatActivity {
                     ref2 = FirebaseDatabase.getInstance().getReference().child("Unresolved Grievances").child(grievanceEmailStr.replaceAll("\\.", "%7"));
 
                     grievanceEmailTv.setText("User: " + grievanceEmailStr);
-                    grievanceDescriptionTv.setText(grievanceDescriptionStr);
+                    grievanceDescriptionEdtTxt.setText(grievanceDescriptionStr);
                     grievanceDepartmentTv.setText("Department: " + grievanceDepartmentStr);
                     grievanceStatusTv.setText("Status: " + grievanceStatusStr);
                     grievanceSubjectTv.setText("Subject: " + grievanceSubjectStr);
@@ -106,25 +110,10 @@ public class GrievanceDetail extends AppCompatActivity {
             }
         });
 
-        final String[] grievanceStatus = new String[1];
-
-        FirebaseDatabase.getInstance().getReference().child("Unsolved Grievances").child(grievanceItemKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                grievanceStatus[0] = Objects.requireNonNull(snapshot.child("status").getValue()).toString();
-                Log.d("Grievance Status", "Grievance Status = " + grievanceStatus[0]);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         grievanceSetStatusBtn.setOnClickListener(view -> {
             boolean sendNotification = false;
 
-            if (grievanceStatusField.getText().toString().equals("On Progress") && !grievanceStatus[0].equals("On Progress")) {
+            if (grievanceStatusField.getText().toString().equals("On Progress") && !grievanceStatusStr.equals("On Progress")) {
                 HashMap grievanceStatusHash = new HashMap();
                 grievanceStatusHash.put("status", "On Progress");
 
@@ -138,7 +127,7 @@ public class GrievanceDetail extends AppCompatActivity {
                         .child(grievanceItemKey);
                 solvedGrievanceRef.removeValue();
                 Log.d("On progress", "On progress working");
-            } else if (grievanceStatusField.getText().toString().equals("Under Review") && !grievanceStatus[0].equals("Under Review")) {
+            } else if (grievanceStatusField.getText().toString().equals("Under Review") && !grievanceStatusStr.equals("Under Review")) {
                 HashMap grievanceStatusHash = new HashMap();
                 grievanceStatusHash.put("status", "Under Review");
 
@@ -152,12 +141,14 @@ public class GrievanceDetail extends AppCompatActivity {
                         .child(grievanceItemKey);
                 solvedGrievanceRef.removeValue();
                 Log.d("On progress", "Under Review working");
-            } else if (grievanceStatusField.getText().toString().equals("Rejected") && !grievanceStatus[0].equals("Rejected")) {
+            } else if (grievanceStatusField.getText().toString().equals("Rejected") && !grievanceStatusStr.equals("Rejected")) {
                 HashMap grievanceStatusHash = new HashMap();
                 grievanceStatusHash.put("status", "Rejected");
 
                 ref.child(grievanceItemKey).updateChildren(grievanceStatusHash);
                 ref2.child(grievanceItemKey).updateChildren(grievanceStatusHash);
+
+                finish();
 
                 sendNotification = true;
 
@@ -174,10 +165,10 @@ public class GrievanceDetail extends AppCompatActivity {
 
                 rejectedGrievanceRef = solvedGrievanceRoot.getReference("Unsolved Grievances").child(grievanceItemKey);
                 rejectedGrievanceRef.removeValue();
-                finish();
+//                finish();
 
                 Log.d("Unresolved", "Unresolved removal" + rejectedGrievanceRef);
-            } else if (grievanceStatusField.getText().toString().equals("Solved") && !grievanceStatus[0].equals("Solved")) {
+            } else if (grievanceStatusField.getText().toString().equals("Solved") && !grievanceStatusStr.equals("Solved")) {
                 HashMap grievanceStatusHash = new HashMap();
                 grievanceStatusHash.put("status", "Solved");
 
@@ -194,7 +185,7 @@ public class GrievanceDetail extends AppCompatActivity {
             }
 
             if (sendNotification) {
-                Toast.makeText(this, "Status changed", Toast.LENGTH_SHORT).show();
+                Toasty.normal(this, "Status changed", R.drawable.notification_icon).show();
                 FirebaseDatabase.getInstance().getReference().child("Registered Users/" + grievanceEmailStr.replaceAll("\\.", "%7")).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -220,6 +211,14 @@ public class GrievanceDetail extends AppCompatActivity {
         grievanceShareFbCv.setOnClickListener(view -> shareGrievanceFb());
 
         grievanceShareInstagramCv.setOnClickListener(view -> shareGrievanceInstagram());
+
+        grievanceUpdateBtn.setOnClickListener(view -> updateGrievance());
+    }
+
+    private void updateGrievance() {
+        HashMap grievanceDescHash = new HashMap();
+        grievanceDescHash.put("complain", grievanceDescriptionEdtTxt.getText().toString());
+        FirebaseDatabase.getInstance().getReference("Unsolved Grievances/" + grievanceItemKey).updateChildren(grievanceDescHash);
     }
 
     private void shareGrievanceInstagram() {
@@ -229,16 +228,16 @@ public class GrievanceDetail extends AppCompatActivity {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.instagram.android");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             startActivity(shareIntent);
         } else if (doesPackageExist("com.instagram.lite")) {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.instagram.lite");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             startActivity(shareIntent);
         } else {
-            Toast.makeText(this, "Please install Instagram", Toast.LENGTH_SHORT).show();
+            Toasty.normal(this, "Please install Instagram", R.drawable.iea_logo).show();
         }
     }
 
@@ -249,16 +248,16 @@ public class GrievanceDetail extends AppCompatActivity {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.facebook.katana");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             startActivity(shareIntent);
         } else if (doesPackageExist("com.facebook.lite")) {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.facebook.lite");
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             startActivity(shareIntent);
         } else {
-            Toast.makeText(this, "Please install Facebook", Toast.LENGTH_SHORT).show();
+            Toasty.normal(this, "Please install Facebook", R.drawable.notification_icon).show();
         }
     }
 
@@ -270,13 +269,13 @@ public class GrievanceDetail extends AppCompatActivity {
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.twitter.android");
             shareIntent.putExtra(Intent.EXTRA_TITLE, grievanceSubjectStr);
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         } else if (doesPackageExist("com.twitter.android.lite")) {
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.setPackage("com.twitter.android.lite");
             shareIntent.putExtra(Intent.EXTRA_TITLE, grievanceSubjectStr);
-            shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         }else {
             String tweetUrl = "https://twitter.com/intent/tweet?text=" + grievanceSubjectStr + ": " + grievanceDescriptionStr;
             Uri uri = Uri.parse(tweetUrl);
@@ -309,8 +308,7 @@ public class GrievanceDetail extends AppCompatActivity {
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(GrievanceDetail.this,
-                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
+            Toasty.normal(this, "There is no email client installed.", R.drawable.notification_icon).show();
         }
     }
 

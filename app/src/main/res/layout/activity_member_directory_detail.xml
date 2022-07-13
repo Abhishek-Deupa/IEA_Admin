@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:fillViewport="true"
-    tools:context=".UserProfile">
+    tools:context=".MemberDirectoryDetail">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/member_profile_image_cardView"
@@ -23,6 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:importantForAccessibility="no"
                 android:id="@+id/member_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -57,9 +59,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
+                    android:importantForAccessibility="no"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/user_membership_img" />
@@ -72,7 +76,8 @@
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="IEA/122/2022"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -107,7 +112,8 @@
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="Member Since"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/member_membership_date"
@@ -137,18 +143,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Valid Upto"
+                        android:text="Valid Up to"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
+                        android:id="@+id/MembershipExpiryDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/MembershipExpiryDate"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="14th  Nov, 2023"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -157,6 +165,7 @@
         </androidx.cardview.widget.CardView>
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -172,20 +181,21 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:fontFamily="@font/poppins_regular"
-            android:text=""
-            android:hint="XXXXXXXXXX"
             android:autoLink="phone"
-            android:textSize="18sp"
+            android:backgroundTint="@color/black"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="Phone Number"
+            android:text=""
+            android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/membership_date_cardView"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/black"/>
+            tools:ignore="HardcodedText" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -201,19 +211,20 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:hint="DD/MM/YYYY"
+            android:backgroundTint="@color/black"
             android:fontFamily="@font/poppins_regular"
+            android:hint="DD/MM/YYYY"
             android:text=""
-            android:textSize="18sp"
+            android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/member_contactNumber"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/black"/>
+            tools:ignore="HardcodedText" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -229,20 +240,21 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:autoLink="email"
+            android:backgroundTint="@color/black"
+            android:focusable="false"
             android:fontFamily="@font/poppins_regular"
             android:text=""
-            android:autoLink="email"
-            android:textSize="18sp"
+            android:textColor="@color/grey"
             android:textColorHint="@color/grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/member_dateOfBirth"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/grey"
-            android:backgroundTint="@color/black"
-            android:focusable="false"/>
+            tools:ignore="HardcodedText" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -258,19 +270,20 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/black"
             android:fontFamily="@font/poppins_regular"
-            android:text=""
             android:hint="Company Name"
-            android:textSize="18sp"
+            android:text=""
+            android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/member_email"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/black"/>
+            tools:ignore="HardcodedText" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -286,34 +299,66 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/black"
             android:fontFamily="@font/poppins_regular"
             android:hint="Address"
             android:text=""
-            android:textSize="18sp"
+            android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/member_company_name"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/black"/>
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/member_bio"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/edittext_style_white_smaller"
-            app:layout_constraintTop_toBottomOf="@id/member_address"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/black"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edittext_style_white_smaller"
             android:fontFamily="@font/inter_regular"
             android:padding="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/member_address" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/remove_member_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_style_white_smaller"
+            android:backgroundTint="#212121"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="Remove Member"
+            android:textAllCaps="false"
+            android:textColor="#ff0000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/member_bio"
+            tools:ignore="HardcodedText" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/make_member_of_month_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_style_black"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="M.O.M"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/member_bio"
+            tools:ignore="HardcodedText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

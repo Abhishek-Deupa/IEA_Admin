@@ -1,9 +1,5 @@
 package com.example.ieaadmin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,9 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,32 +30,31 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
+
+import es.dmoral.toasty.Toasty;
 
 public class memberApprovalDetail extends AppCompatActivity {
 
-    TextView newMemberName,newMemberEmail,newMemberCompany,newMemberTurnover,newMemberIndustry,newMemberMembership,newMemberAmountLeft,newMemberContact,newMemberPaymentReceiver,newMemberEmailforAuth;
+    TextView newMemberName, newMemberEmail, newMemberCompany, newMemberTurnover, newMemberIndustry, newMemberMembership, newMemberAmountLeft, newMemberContact, newMemberPaymentReceiver, newMemberEmailforAuth;
     ImageView newMemberPayProof;
-    EditText newMemberPassforAuth,RejectionReasonText;
+    EditText newMemberPassforAuth, RejectionReasonText;
     DatabaseReference databaseReference;
-    AppCompatButton approvalbackbtn,approveBtn,authCreatebtn,rejectBtn,rejectionReasonbtn;
+    AppCompatButton approvalbackbtn, approveBtn, authCreatebtn, rejectBtn, rejectionReasonbtn;
     FirebaseDatabase memberDirectoryRoot;
-    DatabaseReference memberDirectoryRef,registrationDataRef,tempRegistrationData;
+    DatabaseReference memberDirectoryRef, registrationDataRef, tempRegistrationData;
     StorageReference defaultProfilePicReference;
+    String newName, newEmail, newCompany, newIndustry, newAmountLeft, newphoneno, newProofUrl, newTurnover, newMembership, newpaymentReceiver;
+    String nullString, email_address, password;
+    Dialog newMemberIdPassDialog, RejectionMailDialog;
     private FirebaseAuth mAuth;
-
-    String newName,newEmail,newCompany,newIndustry,newAmountLeft,newphoneno,newProofUrl,newTurnover,newMembership,newpaymentReceiver;
-
-    String nullString,email_address,password;
-    Uri imageUri;
-    Dialog newMemberIdPassDialog,RejectionMailDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,29 +63,27 @@ public class memberApprovalDetail extends AppCompatActivity {
 
 
         defaultProfilePicReference = FirebaseStorage.getInstance().getReference();
-        nullString="";
+        nullString = "";
         newMemberIdPassDialog = new Dialog(this);
         RejectionMailDialog = new Dialog(this);
 
 
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Temp Registry");
         newMemberName = findViewById(R.id.new_member_name);
-        newMemberEmail=findViewById(R.id.new_member_email);
-        newMemberCompany=findViewById(R.id.new_member_company);
-        newMemberTurnover=findViewById(R.id.new_member_turnover);
-        newMemberIndustry=findViewById(R.id.new_member_industrytype);
-        newMemberMembership=findViewById(R.id.new_member_membershiptype);
-        newMemberAmountLeft=findViewById(R.id.new_member_payinglater);
-        newMemberContact=findViewById(R.id.new_member_phoneno);
-        newMemberPayProof=findViewById(R.id.new_member_proof_img);
-        newMemberPaymentReceiver=findViewById(R.id.new_member_paymentReceiver);
+        newMemberEmail = findViewById(R.id.new_member_email);
+        newMemberCompany = findViewById(R.id.new_member_company);
+        newMemberTurnover = findViewById(R.id.new_member_turnover);
+        newMemberIndustry = findViewById(R.id.new_member_industrytype);
+        newMemberMembership = findViewById(R.id.new_member_membershiptype);
+        newMemberAmountLeft = findViewById(R.id.new_member_payinglater);
+        newMemberContact = findViewById(R.id.new_member_phoneno);
+        newMemberPayProof = findViewById(R.id.new_member_proof_img);
+        newMemberPaymentReceiver = findViewById(R.id.new_member_paymentReceiver);
 
 
-
-        approvalbackbtn=findViewById(R.id.approvalDetail_back_button);
-        approveBtn=findViewById(R.id.approval_btn);
-        rejectionReasonbtn=findViewById(R.id.rejectionReason_btn);
+        approvalbackbtn = findViewById(R.id.approvalDetail_back_button);
+        approveBtn = findViewById(R.id.approval_btn);
+        rejectionReasonbtn = findViewById(R.id.rejectionReason_btn);
 
         approvalbackbtn.setOnClickListener(view -> finish());
 
@@ -98,17 +93,17 @@ public class memberApprovalDetail extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.exists()){
-                    newName = snapshot.child("fullname").getValue().toString();
-                    newEmail = snapshot.child("email").getValue().toString();
-                    newCompany = snapshot.child("companyName").getValue().toString();
-                    newTurnover = snapshot.child("turnover").getValue().toString();
-                    newIndustry = snapshot.child("department").getValue().toString();
-                    newMembership = snapshot.child("memberfee").getValue().toString();
-                    newAmountLeft = snapshot.child("amountLeft").getValue().toString();
-                    newphoneno  = snapshot.child("phoneNo").getValue().toString();
-                    newProofUrl = snapshot.child("imageUrl").getValue().toString();
-                    newpaymentReceiver=snapshot.child("paymentReceiverName").getValue().toString();
+                if (snapshot.exists()) {
+                    newName = Objects.requireNonNull(snapshot.child("fullname").getValue()).toString();
+                    newEmail = Objects.requireNonNull(snapshot.child("email").getValue()).toString();
+                    newCompany = Objects.requireNonNull(snapshot.child("companyName").getValue()).toString();
+                    newTurnover = Objects.requireNonNull(snapshot.child("turnover").getValue()).toString();
+                    newIndustry = Objects.requireNonNull(snapshot.child("department").getValue()).toString();
+                    newMembership = Objects.requireNonNull(snapshot.child("memberfee").getValue()).toString();
+                    newAmountLeft = Objects.requireNonNull(snapshot.child("amountLeft").getValue()).toString();
+                    newphoneno = Objects.requireNonNull(snapshot.child("phoneNo").getValue()).toString();
+                    newProofUrl = Objects.requireNonNull(snapshot.child("imageUrl").getValue()).toString();
+                    newpaymentReceiver = Objects.requireNonNull(snapshot.child("paymentReceiverName").getValue()).toString();
 
                     newMemberName.setText(newName);
                     newMemberEmail.setText(newEmail);
@@ -135,86 +130,59 @@ public class memberApprovalDetail extends AppCompatActivity {
             }
         });
 
+        approveBtn.setOnClickListener(v -> {
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.newmemberpassword_popup, null);
+            Log.d("newemail", "onClick: " + newEmail);
+            newMemberEmailforAuth = view.findViewById(R.id.newApprove_member_email);
+            newMemberPassforAuth = view.findViewById(R.id.newApprove_member_password);
+            authCreatebtn = view.findViewById(R.id.create_password_btn);
+            newMemberEmailforAuth.setText(newEmail);
+            String automaticPassword = autoPassowrd(newName);
+            newMemberPassforAuth.setText(automaticPassword);
+            newMemberIdPassDialog.setContentView(view);
+            newMemberIdPassDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            newMemberIdPassDialog.show();
 
-
-        approveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = getLayoutInflater();
-                View view = inflater.inflate(R.layout.newmemberpassword_popup, null);
-                Log.d("newemail", "onClick: "+newEmail);
-                newMemberEmailforAuth = view.findViewById(R.id.newApprove_member_email);
-                newMemberPassforAuth = view.findViewById(R.id.newApprove_member_password);
-                authCreatebtn = view.findViewById(R.id.create_password_btn);
-                newMemberEmailforAuth.setText(newEmail);
-                String automaticPassword = autoPassowrd(newName);
-                newMemberPassforAuth.setText(automaticPassword);
-                newMemberIdPassDialog.setContentView(view);
-                newMemberIdPassDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                newMemberIdPassDialog.show();
-
-                authCreatebtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mAuth = FirebaseAuth.getInstance();
-                        if(!newMemberPassforAuth.getText().toString().isEmpty()) {
-                            mAuth.createUserWithEmailAndPassword(newEmail, newMemberPassforAuth.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    memberApproval();
-                                }
-                            });
-                        } else {
-                            newMemberPassforAuth.setError("Please Enter Password");
-                            newMemberPassforAuth.requestFocus();
-                        }
-                    }
-                });
-
-
-
-
-            }
+            authCreatebtn.setOnClickListener(v1 -> {
+                mAuth = FirebaseAuth.getInstance();
+                if (!newMemberPassforAuth.getText().toString().isEmpty()) {
+                    mAuth.createUserWithEmailAndPassword(newEmail, newMemberPassforAuth.getText().toString()).addOnSuccessListener(authResult -> memberApproval());
+                } else {
+                    newMemberPassforAuth.setError("Please Enter Password");
+                    newMemberPassforAuth.requestFocus();
+                }
+            });
         });
 
-        rejectionReasonbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = getLayoutInflater();
-                View view = inflater.inflate(R.layout.rejection_reason_popup, null);
-                RejectionReasonText = view.findViewById(R.id.rejectionReason_text);
-                rejectBtn = view.findViewById(R.id.rejection_btn);
-                RejectionMailDialog.setContentView(view);
-                RejectionMailDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                RejectionMailDialog.show();
-                rejectBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!RejectionReasonText.getText().toString().isEmpty()){
-                            String rejectionReason = RejectionReasonText.getText().toString();
-                            sendRejectionEmail(rejectionReason);
-                            memberDirectoryRoot = FirebaseDatabase.getInstance();
-                            tempRegistrationData = memberDirectoryRoot.getReference("Temp Registry").child(newEmail.replaceAll("\\.", "%7"));
-                            tempRegistrationData.removeValue();
-                            finish();
+        rejectionReasonbtn.setOnClickListener(v -> {
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.rejection_reason_popup, null);
+            RejectionReasonText = view.findViewById(R.id.rejectionReason_text);
+            rejectBtn = view.findViewById(R.id.rejection_btn);
+            RejectionMailDialog.setContentView(view);
+            RejectionMailDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            RejectionMailDialog.show();
+            rejectBtn.setOnClickListener(v12 -> {
+                if (!RejectionReasonText.getText().toString().isEmpty()) {
+                    String rejectionReason = RejectionReasonText.getText().toString();
+                    sendRejectionEmail(rejectionReason, newEmail);
+                    memberDirectoryRoot = FirebaseDatabase.getInstance();
+                    tempRegistrationData = memberDirectoryRoot.getReference("Temp Registry").child(newEmail.replaceAll("\\.", "%7"));
+                    tempRegistrationData.removeValue();
+                    finish();
 
-                        } else {
-                            RejectionReasonText.setError("Reason can not be empty");
-                            RejectionReasonText.requestFocus();
-                        }
+                } else {
+                    RejectionReasonText.setError("Reason can not be empty");
+                    RejectionReasonText.requestFocus();
+                }
 
+            });
 
-                    }
-                });
-
-            }
         });
-
-
-
     }
 
-    public void memberApproval(){
+    public void memberApproval() {
         Date date = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         String approvalDate = df.format(date);
@@ -223,36 +191,23 @@ public class memberApprovalDetail extends AppCompatActivity {
         memberDirectoryRef = memberDirectoryRoot.getReference("Registered Users");
         registrationDataRef = memberDirectoryRoot.getReference("Registration Data");
         tempRegistrationData = memberDirectoryRoot.getReference("Temp Registry").child(newEmail.replaceAll("\\.", "%7"));
-        RegistrationDataModel approveRegistrationData = new RegistrationDataModel(newMembership, newTurnover, newProofUrl, newEmail,newAmountLeft,newIndustry,newpaymentReceiver);
+        RegistrationDataModel approveRegistrationData = new RegistrationDataModel(newMembership, newTurnover, newProofUrl, newEmail, newAmountLeft, newIndustry, newpaymentReceiver);
 
-
-        StorageReference fileRef = defaultProfilePicReference.child("User Profile Pictures/"+newEmail+"ProfilePicture");
-        Bitmap bitmapDefault = BitmapFactory.decodeResource(getResources(),R.drawable.iea_logo);
+        StorageReference fileRef = defaultProfilePicReference.child("User Profile Pictures/" + newEmail + "ProfilePicture");
+        Bitmap bitmapDefault = BitmapFactory.decodeResource(getResources(), R.drawable.iea_logo);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmapDefault.compress(Bitmap.CompressFormat.JPEG,100, baos);
+        bitmapDefault.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] dataImg = baos.toByteArray();
-        fileRef.putBytes(dataImg).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        memberApprovalDetailModel approveMemberDirectoryDetailModel = new memberApprovalDetailModel(nullString, newCompany, nullString,approvalDate,newEmail,nullString,newName,newphoneno,uri.toString(),nullString, newIndustry, nullString);
-                        memberDirectoryRef.child(newEmail.replaceAll("\\.", "%7")).setValue(approveMemberDirectoryDetailModel);
+        fileRef.putBytes(dataImg).addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            memberApprovalDetailModel approveMemberDirectoryDetailModel = new memberApprovalDetailModel(nullString, newCompany, nullString, approvalDate, newEmail, nullString, newName, newphoneno, uri.toString(), nullString, newIndustry, nullString);
+            memberDirectoryRef.child(newEmail.replaceAll("\\.", "%7")).setValue(approveMemberDirectoryDetailModel);
 
-                        registrationDataRef.child(newEmail.replaceAll("\\.", "%7")).setValue(approveRegistrationData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                tempRegistrationData.removeValue();
-                                sendAcceptanceEmail();
-                                Toast.makeText(memberApprovalDetail.this, "Member Approved", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                    }
-                });
-            }
-        });
+            registrationDataRef.child(newEmail.replaceAll("\\.", "%7")).setValue(approveRegistrationData).addOnSuccessListener(unused -> {
+                tempRegistrationData.removeValue();
+                sendAcceptanceEmail();
+                Toasty.normal(memberApprovalDetail.this, "Member Approved", R.drawable.notification_icon).show();
+            });
+        }));
         finish();
     }
 
@@ -275,13 +230,12 @@ public class memberApprovalDetail extends AppCompatActivity {
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(memberApprovalDetail.this,
-                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
+            Toasty.normal(memberApprovalDetail.this,"There is no email client installed.", R.drawable.notification_icon).show();
         }
     }
-    @SuppressLint("IntentReset")
-    protected void sendRejectionEmail(String rejectionReason) {
 
+    @SuppressLint("IntentReset")
+    protected void sendRejectionEmail(String rejectionReason, String newEmail) {
 
         Log.i("Send email", "");
 
@@ -292,27 +246,26 @@ public class memberApprovalDetail extends AppCompatActivity {
 
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "IEA Membership Rejected");
-        emailIntent.putExtra(Intent.EXTRA_TEXT,"Your membership got rejected due to following reason \n\n"+rejectionReason );
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Your membership got rejected due to following reason \n\n" + rejectionReason);
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(memberApprovalDetail.this,
-                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
+            Toasty.normal(memberApprovalDetail.this,"There is no email client installed.", R.drawable.notification_icon).show();
         }
     }
 
-    public String autoPassowrd(String name){
-        String Alphabet="abcdefghijaklmnopqrstuvwxyz";
+    public String autoPassowrd(String name) {
+        String Alphabet = "a11b22c34d56e78f90g09h87i65j43a21k12l34m56n78o90p1q2r3s4t5u6v7w8xy0z";
         StringBuilder randomPass = new StringBuilder();
         Random random = new Random();
-        int length =4;
-        for(int i=0;i<length;i++){
+        int length = 4;
+        for (int i = 0; i < length; i++) {
             int index = random.nextInt(Alphabet.length());
             char randomChar1 = Alphabet.charAt(index);
             randomPass.append(randomChar1);
         }
-        for(int i=0;i<4;i++){
+        for (int i = 0; i < 4; i++) {
             char randomChar2 = name.charAt(i);
             randomPass.append(randomChar2);
         }

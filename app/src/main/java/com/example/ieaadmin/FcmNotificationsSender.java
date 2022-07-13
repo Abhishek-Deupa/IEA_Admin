@@ -24,6 +24,7 @@ public class FcmNotificationsSender  {
     String body;
     Context mContext;
     Activity mActivity;
+    int number;
 
     private RequestQueue requestQueue;
     private final String postUrl = "https://fcm.googleapis.com/fcm/send";
@@ -37,21 +38,29 @@ public class FcmNotificationsSender  {
         this.mActivity = mActivity;
     }
 
+    public FcmNotificationsSender(String userFcmToken, String title, String body, Context mContext, Activity mActivity, int number) {
+        this.userFcmToken = userFcmToken;
+        this.title = title;
+        this.body = body;
+        this.mContext = mContext;
+        this.mActivity = mActivity;
+        this.number = number;
+    }
+
     public void SendNotifications() {
 
         requestQueue = Volley.newRequestQueue(mActivity);
         JSONObject mainObj = new JSONObject();
         try {
             mainObj.put("to", userFcmToken);
+            mainObj.put("icon", "iea_logo");
             JSONObject notiObject = new JSONObject();
             notiObject.put("title", title);
             notiObject.put("body", body);
-            notiObject.put("icon", R.drawable.iea_logo); // enter icon that exists in drawable only
-
-
+//            notiObject.put("icon", "iea_logo");
+//            notiObject.put("number", String.valueOf(number));
 
             mainObj.put("notification", notiObject);
-
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, new Response.Listener<JSONObject>() {
                 @Override
@@ -85,9 +94,5 @@ public class FcmNotificationsSender  {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }

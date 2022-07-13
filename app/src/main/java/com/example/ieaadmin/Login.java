@@ -22,6 +22,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import java.util.HashMap;
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
+
 public class Login extends AppCompatActivity {
 
     AppCompatButton loginBackButton, signInButton;
@@ -75,11 +77,11 @@ public class Login extends AppCompatActivity {
                             }
                         });
 
-                        Toast.makeText(Login.this, "You are logged in!", Toast.LENGTH_SHORT).show();
+                        Toasty.normal(Login.this, "You are logged in!", R.drawable.notification_icon).show();
                         startActivity(new Intent(Login.this, explore_menu.class).putExtra("userEmail", replacePeriod(login_email)));
                         finish();
                     } else {
-                        Toast.makeText(Login.this, "Login Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        Toasty.normal(Login.this, "Login Error: " + Objects.requireNonNull(task.getException()).getMessage(), R.drawable.notification_icon).show();
                     }
                 }
             });

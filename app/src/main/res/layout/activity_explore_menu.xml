@@ -132,17 +132,6 @@
                 app:layout_constraintTop_toBottomOf="@id/description_img" />
 
             <TextView
-                android:id="@+id/short_descriptio_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Short Description"
-                android:textColor="@color/different_black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/description_username" />
-
-            <TextView
                 android:id="@+id/description_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,13 +139,14 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:paddingBottom="8dp"
-                android:text="Thank you for initiating a step towards degitalizing IEA and Making it Convenient for Everyone to Grow their Businesses."
+                android:text="Thank you for initiating a step towards digitization IEA and Making it Convenient for Everyone to Grow their Businesses."
                 android:textColor="@color/different_black"
-                android:textSize="9sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/short_descriptio_text" />
+                app:layout_constraintTop_toBottomOf="@id/description_username"
+                tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

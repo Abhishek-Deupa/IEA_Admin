@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import es.dmoral.toasty.Toasty;
+
 public class UserProfile extends AppCompatActivity {
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -53,6 +55,7 @@ public class UserProfile extends AppCompatActivity {
     }
 
     DatabaseReference ref = database.getReference("Registered Users/" + userEmailConverted);
+
 
     ImageView userProfileImage;
     TextView userProfileName, userMembershipId, userMembershipDate,userMembershipExpiryDate;
@@ -95,6 +98,7 @@ public class UserProfile extends AppCompatActivity {
                         .into(userProfileImage);
             }
         });
+
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -191,12 +195,12 @@ public class UserProfile extends AppCompatActivity {
         databaseReference.updateChildren(UserData).addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                Toast.makeText(UserProfile.this, "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                Toasty.normal(UserProfile.this, "Data Updated Successfully", R.drawable.notification_icon).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UserProfile.this, "Failed to Update Data", Toast.LENGTH_SHORT).show();
+                Toasty.normal(UserProfile.this, "Failed to Update Data", R.drawable.notification_icon).show();
             }
         });
 //        uploadImageToFirebase(resultUri);
@@ -239,16 +243,16 @@ public class UserProfile extends AppCompatActivity {
                         databaseReference.updateChildren(UserData).addOnSuccessListener(new OnSuccessListener() {
                             @Override
                             public void onSuccess(Object o) {
-                                Toast.makeText(UserProfile.this, "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                                Toasty.normal(UserProfile.this, "Data Updated Successfully", R.drawable.notification_icon).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(UserProfile.this, "Failed to Update Data", Toast.LENGTH_SHORT).show();
+                                Toasty.normal(UserProfile.this, "Failed to Update Data", R.drawable.notification_icon).show();
                             }
                         });
 
-                        Toast.makeText(UserProfile.this, "Profile Picture Updated", Toast.LENGTH_SHORT).show();
+                        Toasty.normal(UserProfile.this, "Profile Picture Updated", R.drawable.notification_icon).show();
                     }
 
                 });
@@ -258,7 +262,7 @@ public class UserProfile extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UserProfile.this, "Failed to Update Profile Picture", Toast.LENGTH_SHORT).show();
+                Toasty.normal(UserProfile.this, "Failed to Update Profile Picture", R.drawable.notification_icon).show();
             }
         });
     }

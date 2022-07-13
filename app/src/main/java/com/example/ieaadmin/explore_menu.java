@@ -29,14 +29,18 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class explore_menu extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    TextView exploreUsername, descriptionUsername;
+    TextView exploreUsername, Memberofmonthname, memberOfMonthDescriptionText;
     ImageView logoutImg, userImage;
-    CardView  memberDirectoryCard, grievanceCard, newMembers,bbas;
+    CircleImageView MemberofmonthImg;
+    CardView  memberDirectoryCard, grievanceCard, newMembers,bbas,event;
     Dialog exploreIeaContactDialog;
     DatabaseReference databaseReference;
+    DatabaseReference MemberOfMonthref = FirebaseDatabase.getInstance().getReference("Member of Month");
     StorageReference storageProfilePicReference;
 
     @Override
@@ -45,7 +49,8 @@ public class explore_menu extends AppCompatActivity {
         setContentView(R.layout.activity_explore_menu);
 
         exploreUsername = findViewById(R.id.explore_username);
-        descriptionUsername = findViewById(R.id.description_username);
+        Memberofmonthname = findViewById(R.id.description_username);
+        MemberofmonthImg = findViewById(R.id.description_img);
         logoutImg = findViewById(R.id.logout_img);
         memberDirectoryCard = findViewById(R.id.member_directory);
         grievanceCard = findViewById(R.id.grievance);
@@ -53,6 +58,8 @@ public class explore_menu extends AppCompatActivity {
         bbas = findViewById(R.id.bbas);
         exploreIeaContactDialog = new Dialog(this);
         userImage = findViewById(R.id.user_img);
+        event = findViewById(R.id.events);
+        memberOfMonthDescriptionText = findViewById(R.id.description_text);
 
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Registered Users");
@@ -92,6 +99,29 @@ public class explore_menu extends AppCompatActivity {
             }
         });
 
+        MemberOfMonthref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String UserNameStr = Objects.requireNonNull(snapshot.child("name").getValue().toString());
+                String purl = Objects.requireNonNull(snapshot.child("purl").getValue().toString());
+                String description = snapshot.child("description").getValue().toString();
+                Memberofmonthname.setText(UserNameStr);
+                memberOfMonthDescriptionText.setText(description);
+                Glide.with(getApplicationContext())
+                        .load(purl)
+                        .placeholder(R.drawable.iea_logo)
+                        .circleCrop()
+                        .error(R.drawable.iea_logo)
+                        .into(MemberofmonthImg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
 
         logoutImg.setOnClickListener(view -> {
@@ -102,11 +132,13 @@ public class explore_menu extends AppCompatActivity {
 
         memberDirectoryCard.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, MembersDirectory.class)));
 
+//        MemberofmonthImg.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, MemberOfMonth.class)));
+
         grievanceCard.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, Grievance.class)));
 
         newMembers.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, member_approval.class)));
 
-
+        event.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, EventList.class)));
 
         userImage.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, UserProfile.class)));
 
