@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -218,7 +220,17 @@ public class GrievanceDetail extends AppCompatActivity {
     private void updateGrievance() {
         HashMap grievanceDescHash = new HashMap();
         grievanceDescHash.put("complain", grievanceDescriptionEdtTxt.getText().toString());
-        FirebaseDatabase.getInstance().getReference("Unsolved Grievances/" + grievanceItemKey).updateChildren(grievanceDescHash);
+        FirebaseDatabase.getInstance().getReference("Unsolved Grievances/" + grievanceItemKey).updateChildren(grievanceDescHash).addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toasty.normal(GrievanceDetail.this, "Complain updated", R.drawable.iea_logo).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toasty.normal(GrievanceDetail.this, "Please try again", R.drawable.iea_logo).show();
+            }
+        });
     }
 
     private void shareGrievanceInstagram() {

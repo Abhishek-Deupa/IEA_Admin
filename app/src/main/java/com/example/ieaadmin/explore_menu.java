@@ -104,7 +104,7 @@ public class explore_menu extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String UserNameStr = Objects.requireNonNull(snapshot.child("name").getValue().toString());
                 String purl = Objects.requireNonNull(snapshot.child("purl").getValue().toString());
-                String description = snapshot.child("description").getValue().toString();
+                String description = Objects.requireNonNull(snapshot.child("description").getValue().toString());
                 Memberofmonthname.setText(UserNameStr);
                 memberOfMonthDescriptionText.setText(description);
                 Glide.with(getApplicationContext())

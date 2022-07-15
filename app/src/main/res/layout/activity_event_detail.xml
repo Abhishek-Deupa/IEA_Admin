@@ -19,9 +19,21 @@
             app:layout_constraintTop_toTopOf="parent"
             android:src="@color/different_black"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/eventDetailCV"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="+Add Image"
+            android:textColor="@color/white"
+            android:layout_marginEnd="30dp"
+            android:textSize="16sp"/>
+
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/eventDetailCV"
             android:background="#F5F5F5"
             android:backgroundTint="#F5F5F5"
             android:outlineSpotShadowColor="#F5F5F5"
