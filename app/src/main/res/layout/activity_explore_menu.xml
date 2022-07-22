@@ -255,7 +255,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/bbas"
+                android:id="@+id/notification_broadcast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_rowWeight="1"
@@ -282,7 +282,7 @@
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="60dp"
-                    android:text="BAAS"
+                    android:text="Notifcation Broadcast"
                     android:textColor="#000"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -293,7 +293,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="80dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Business of Services"
+                    android:text="Notify your members"
                     android:textColor="@color/different_black"
                     android:textSize="9sp" />
 
@@ -310,7 +310,7 @@
                 app:cardBackgroundColor="@color/white"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_toEndOf="@id/bbas"
+                android:layout_toEndOf="@id/notification_broadcast"
                 android:layout_below="@id/member_directory"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="6dp">
@@ -328,7 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="60dp"
-                    android:text="Grievance"
+                    android:text="Grievance             "
                     android:textColor="#000"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -352,7 +352,7 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 app:cardBackgroundColor="@color/white"
-                android:layout_below="@id/bbas"
+                android:layout_below="@id/notification_broadcast"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"

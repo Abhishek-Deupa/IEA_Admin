@@ -37,7 +37,7 @@ public class explore_menu extends AppCompatActivity {
     TextView exploreUsername, Memberofmonthname, memberOfMonthDescriptionText;
     ImageView logoutImg, userImage;
     CircleImageView MemberofmonthImg;
-    CardView  memberDirectoryCard, grievanceCard, newMembers,bbas,event;
+    CardView  memberDirectoryCard, grievanceCard, newMembers, notificationBroadcast,event;
     Dialog exploreIeaContactDialog;
     DatabaseReference databaseReference;
     DatabaseReference MemberOfMonthref = FirebaseDatabase.getInstance().getReference("Member of Month");
@@ -55,7 +55,7 @@ public class explore_menu extends AppCompatActivity {
         memberDirectoryCard = findViewById(R.id.member_directory);
         grievanceCard = findViewById(R.id.grievance);
         newMembers = findViewById(R.id.new_member);
-        bbas = findViewById(R.id.bbas);
+        notificationBroadcast = findViewById(R.id.notification_broadcast);
         exploreIeaContactDialog = new Dialog(this);
         userImage = findViewById(R.id.user_img);
         event = findViewById(R.id.events);
@@ -142,6 +142,7 @@ public class explore_menu extends AppCompatActivity {
 
         userImage.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, UserProfile.class)));
 
+        notificationBroadcast.setOnClickListener(view -> startActivity(new Intent(explore_menu.this, NotificationBroadcast.class)));
     }
     @Override
     protected void onRestart() {

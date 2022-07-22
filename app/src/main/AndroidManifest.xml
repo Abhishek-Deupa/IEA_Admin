@@ -20,6 +20,9 @@
         android:theme="@style/Theme.IEAApp"
         tools:targetApi="28">
         <activity
+            android:name=".NotificationBroadcast"
+            android:exported="false" />
+        <activity
             android:name=".EventList"
             android:exported="false" />
         <activity
@@ -83,8 +86,8 @@
 
         <service
             android:name=".FirebaseMessagingService"
-            android:exported="false"
-            android:directBootAware="true">
+            android:directBootAware="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -92,8 +95,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notification_icon"/>
-
+            android:resource="@drawable/notification_icon" />
     </application>
 
 </manifest>

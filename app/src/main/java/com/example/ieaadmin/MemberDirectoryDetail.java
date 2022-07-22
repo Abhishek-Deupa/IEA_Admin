@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.browse.MediaBrowser;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,11 +35,10 @@ import es.dmoral.toasty.Toasty;
 public class MemberDirectoryDetail extends AppCompatActivity {
     ImageView memberProfileImage;
     TextView memberProfileName, memberMembershipId, memberMembershipDate, memberContactNumber, memberDateOfBirth, memberEmailTxtView,
-            memberCompanyName, memberAddress, memberBio, memberMembershipExpiryDate, removeText, yesbtn,nobtn;
+            memberCompanyName, memberAddress, memberBio, memberMembershipExpiryDate, yesbtn, nobtn;
     DatabaseReference ref;
     FirebaseAuth mAuth;
-    String currentUser,memberMembershipDateStr,memberMembershipIdStr,memberPhoneNumberStr,memberBioStr,memberPictureUrl,memberNameStr
-            ,memberAddressStr,memberCompanyNameStr,memberEmailStr,memberDOBStr;
+    String currentUser, memberMembershipDateStr, memberMembershipIdStr, memberPhoneNumberStr, memberBioStr, memberPictureUrl, memberNameStr, memberAddressStr, memberCompanyNameStr, memberEmailStr, memberDOBStr;
     AppCompatButton removeBtn, makeMemberOfTheMonthBtn;
     Dialog confirmationDialog, memberDescriptionDialog;
 
@@ -51,7 +48,7 @@ public class MemberDirectoryDetail extends AppCompatActivity {
         setContentView(R.layout.activity_member_directory_detail);
 
         ref = FirebaseDatabase.getInstance().getReference().child("Registered Users");
-        mAuth= FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser().getEmail();
 
 
@@ -65,7 +62,7 @@ public class MemberDirectoryDetail extends AppCompatActivity {
         memberCompanyName = findViewById(R.id.member_company_name);
         memberAddress = findViewById(R.id.member_address);
         memberBio = findViewById(R.id.member_bio);
-        memberMembershipExpiryDate=findViewById(R.id.MembershipExpiryDate);
+        memberMembershipExpiryDate = findViewById(R.id.MembershipExpiryDate);
         removeBtn = findViewById(R.id.remove_member_btn);
         makeMemberOfTheMonthBtn = findViewById(R.id.make_member_of_month_btn);
         memberDescriptionDialog = new Dialog(this);
@@ -75,17 +72,17 @@ public class MemberDirectoryDetail extends AppCompatActivity {
         ref.child(coreItemKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                     memberMembershipDateStr = snapshot.child("date_of_membership").getValue().toString();
-                     memberMembershipIdStr = snapshot.child("member_id").getValue().toString();
-                     memberPhoneNumberStr = snapshot.child("phone_number").getValue().toString();
-                     memberDOBStr = snapshot.child("date_of_birth").getValue().toString();
-                     memberEmailStr = snapshot.child("email").getValue().toString();
-                     memberCompanyNameStr = snapshot.child("company_name").getValue().toString();
-                     memberAddressStr = snapshot.child("address").getValue().toString();
-                     memberNameStr = snapshot.child("name").getValue().toString();
-                     memberPictureUrl = snapshot.child("purl").getValue().toString();
-                     memberBioStr = snapshot.child("description").getValue().toString();
+                if (snapshot.exists()) {
+                    memberMembershipDateStr = snapshot.child("date_of_membership").getValue().toString();
+                    memberMembershipIdStr = snapshot.child("member_id").getValue().toString();
+                    memberPhoneNumberStr = snapshot.child("phone_number").getValue().toString();
+                    memberDOBStr = snapshot.child("date_of_birth").getValue().toString();
+                    memberEmailStr = snapshot.child("email").getValue().toString();
+                    memberCompanyNameStr = snapshot.child("company_name").getValue().toString();
+                    memberAddressStr = snapshot.child("address").getValue().toString();
+                    memberNameStr = snapshot.child("name").getValue().toString();
+                    memberPictureUrl = snapshot.child("purl").getValue().toString();
+                    memberBioStr = snapshot.child("description").getValue().toString();
                     String memberMembershipExpiryDateStr = yearincrementer(memberMembershipDateStr);
 
                     memberMembershipId.setText(memberMembershipIdStr);
@@ -136,8 +133,8 @@ public class MemberDirectoryDetail extends AppCompatActivity {
 
                     public void onClick(View view) {
 
-                        memberRejection(coreItemKey,currentUser.replaceAll("\\.", "%7"));
-                        Log.d("ramdom", "onClick: "+coreItemKey+currentUser);
+                        memberRejection(coreItemKey, currentUser.replaceAll("\\.", "%7"));
+                        Log.d("ramdom", "onClick: " + coreItemKey + currentUser);
                     }
                 });
             }
@@ -152,7 +149,7 @@ public class MemberDirectoryDetail extends AppCompatActivity {
             EditText memberOfTheMonthDescriptionEdtTxt = view1.findViewById(R.id.member_of_month_description_edtTxt);
 
             setMemberOfMonth.setOnClickListener(v -> {
-                ProgressDialog progressDialog = new ProgressDialog (view.getContext());
+                ProgressDialog progressDialog = new ProgressDialog(view.getContext());
                 progressDialog.setMessage("Please wait...");
                 progressDialog.show();
                 DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference().child("Member of Month");
@@ -175,24 +172,25 @@ public class MemberDirectoryDetail extends AppCompatActivity {
             });
         });
     }
-    public String yearincrementer(String date){
+
+    public String yearincrementer(String date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-        Calendar c =Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         try {
             c.setTime(sdf.parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        c.add(Calendar.DATE,365);
-        date=sdf.format(c.getTime());
+        c.add(Calendar.DATE, 365);
+        date = sdf.format(c.getTime());
         return date;
     }
 
-    public void memberRejection(String Email, String currentUser){
-        UserRegistrationHelperClass rejectedMemberDetails = new UserRegistrationHelperClass(memberNameStr,memberEmailStr,memberPhoneNumberStr,memberCompanyNameStr
-                                                                ,memberAddressStr,memberDOBStr,memberPictureUrl,memberBioStr);
-        if(Email.equals(currentUser)){
+    public void memberRejection(String Email, String currentUser) {
+        UserRegistrationHelperClass rejectedMemberDetails = new UserRegistrationHelperClass(memberNameStr, memberEmailStr, memberPhoneNumberStr, memberCompanyNameStr
+                , memberAddressStr, memberDOBStr, memberPictureUrl, memberBioStr);
+        if (Email.equals(currentUser)) {
             Toasty.normal(this, "You Can't remove Yourself", R.drawable.notification_icon).show();
 
         } else {
